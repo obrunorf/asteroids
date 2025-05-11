@@ -9,6 +9,7 @@ class Player(CircleShape):
         self.original_image = pygame.image.load("spaceship.png").convert_alpha()
         self.image = self.original_image.copy()
         self.rect = self.image.get_rect(center=(x,y))
+        self.shot_cadency = 0.0
 
     # in the player class
     def triangle(self):
@@ -46,7 +47,11 @@ class Player(CircleShape):
             self.move( - dt )
         if keys[pygame.K_SPACE]:
             self.shoot()
+        self.shot_cadency -= dt
 
     def shoot(self):
+        if self.shot_cadency > 0:
+            return
         bullet = Shot(self.position.x, self.position.y, SHOT_RADIUS) #creates bullet at current position
         bullet.velocity = PLAYER_SHOT_SPEED * pygame.Vector2(0, 1).rotate(self.rotation)
+        self.shot_cadency = PLAYER_SHOOT_COOLDOWN

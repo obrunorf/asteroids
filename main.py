@@ -25,7 +25,7 @@ def main():
     Player.containers = (updateable,drawable)
     Asteroid.containers = (asteroids, updateable, drawable)
     AsteroidField.containers = (updateable)
-    Shot.containers = (updateable,drawable)
+    Shot.containers = (shots,updateable,drawable)
     spaceship = Player(x, y)
     sector = AsteroidField()
     while running:
@@ -39,6 +39,11 @@ def main():
             if asteroid.check_colision(spaceship):
                 print("Game over!")
                 exit()
+            for bullet in shots:
+                if asteroid.check_colision(bullet):
+                    asteroid.split()
+                    bullet.kill()
+                    
         for ele in drawable:
             ele.draw(screen)
         pygame.display.flip()
